@@ -1,0 +1,41 @@
+{
+  "type": "sanqing_inspection",
+  "aspect": "元始·洞察",
+  "timestamp": "2026-03-10T17:47:00+08:00",
+  "findings": [
+    {
+      "supplier": "S005",
+      "name": "东莞精密五金",
+      "issue": "微动开关批次故障率2.3%，超过2%阈值",
+      "severity": "high",
+      "metrics": {
+        "defect_rate": 0.023,
+        "on_time_rate": 0.88,
+        "current_level": "B"
+      },
+      "risk_flags": ["近期微动开关批次故障率偏高", "无替代供应商覆盖锁具品类"],
+      "recommendation": "降级为C级，启动替代供应商寻源；暂停微动开关品类新订单",
+      "affected_bom": ["SW-MICRO-01"]
+    },
+    {
+      "supplier": "S007",
+      "name": "宁波制冷科技",
+      "issue": "除湿片为独家供应，存在供应链中断风险",
+      "severity": "medium",
+      "metrics": {
+        "defect_rate": 0.005,
+        "on_time_rate": 0.92,
+        "current_level": "A"
+      },
+      "risk_flags": ["除湿片为独家供应"],
+      "recommendation": "启动第二供应商寻源，建立安全库存（建议3个月用量）",
+      "affected_bom": ["DH-TEC-60W"]
+    }
+  ],
+  "summary": {
+    "total_suppliers": 3,
+    "high_severity": 1,
+    "medium_severity": 1,
+    "low_severity": 0
+  }
+}

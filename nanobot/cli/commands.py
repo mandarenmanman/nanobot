@@ -463,6 +463,8 @@ def gateway(
 def agent(
     message: str = typer.Option(None, "--message", "-m", help="Message to send to the agent"),
     session_id: str = typer.Option("cli:direct", "--session", "-s", help="Session ID"),
+    workspace: str | None = typer.Option(None, "--workspace", "-w", help="Workspace directory"),
+    config_file: str | None = typer.Option(None, "--config", "-c", help="Config file path"),
     markdown: bool = typer.Option(True, "--markdown/--no-markdown", help="Render assistant output as Markdown"),
     logs: bool = typer.Option(False, "--logs/--no-logs", help="Show nanobot runtime logs during chat"),
 ):
@@ -474,7 +476,10 @@ def agent(
     from nanobot.config.loader import get_data_dir, load_config
     from nanobot.cron.service import CronService
 
-    config = load_config()
+    config_path = Path(config_file) if config_file else None
+    config = load_config(config_path)
+    if workspace:
+        config.agents.defaults.workspace = workspace
     sync_workspace_templates(config.workspace_path)
 
     bus = MessageBus()

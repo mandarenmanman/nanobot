@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智能柜全链路AI决策中枢系统规划</title>
+  <script src="https://registry.npmmirror.com/vue/3.4.21/files/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://registry.npmmirror.com/@fortawesome/fontawesome-free/6.5.1/files/css/all.min.css" />
+  <script src="https://registry.npmmirror.com/mermaid/10.9.0/files/dist/mermaid.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2D5A9E',
+            accent: '#E67E22',
+            dark: '#1a1a2e',
+            card: '#16213e',
+            glass: 'rgba(255,255,255,0.05)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans SC', sans-serif; background: #0a0a1a; color: #e0e0e0; }
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-text-warm {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .glow-blue { box-shadow: 0 0 30px rgba(45,90,158,0.3); }
+    .glow-orange { box-shadow: 0 0 30px rgba(230,126,34,0.3); }
+    .node-line::before {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #2D5A9E, #E67E22);
+    }
+    .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .hero-bg {
+      background: radial-gradient(ellipse at 30% 20%, rgba(45,90,158,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(230,126,34,0.1) 0%, transparent 50%),
+                  #0a0a1a;
+    }
+    .phase-bar { height: 4px; border-radius: 2px; transition: width 1s ease; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a1a; }
+    ::-webkit-scrollbar-thumb { background: #2D5A9E; border-radius: 3px; }
+    .mermaid svg { max-width: 100%; height: auto; }
+    .mermaid .node rect, .mermaid .node polygon, .mermaid .node circle { rx: 8; ry: 8; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Hero Section -->
+  <section class="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-20 left-20 w-72 h-72 bg-primary rounded-full filter blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-20 right-20 w-96 h-96 bg-accent rounded-full filter blur-3xl animate-pulse" style="animation-delay:1s"></div>
+    </div>
+    <div class="text-center relative z-10 px-6">
+      <div class="mb-6">
+        <i class="fas fa-microchip text-5xl text-primary opacity-60"></i>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black mb-4 gradient-text leading-tight">
+        构建未来工厂
+      </h1>
+      <h2 class="text-2xl md:text-3xl font-light text-gray-300 mb-6">
+        智能柜全链路AI决策中枢系统规划
+      </h2>
+      <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-10">
+        从"端到端自动化"到"自进化数据大脑"的双轮驱动战略
+      </p>
+      <a href="#pain" class="inline-block px-8 py-3 rounded-full bg-primary/20 border border-primary/40 text-primary hover:bg-primary/30 transition">
+        <i class="fas fa-chevron-down mr-2"></i>开始汇报
+      </a>
+    </div>
+  </section>
+
+  <!-- Section 1: Pain Points -->
+  <section id="pain" class="py-24 px-6 md:px-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Part 01</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">破局 <span class="text-gray-500 text-xl font-light">—— 当前业务痛点</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">我们需要一个能穿透【销售-研发-行政-供应链-运维】全流程的"超级项目总控"。</p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div v-for="(pain, i) in pains" :key="i" class="glass-card rounded-2xl p-8 hover:border-red-500/30 transition group">
+          <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center mb-5 group-hover:bg-red-500/20 transition">
+            <i :class="pain.icon" class="text-red-400 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-3 text-white">{{ pain.title }}</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">{{ pain.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Dual-Wheel Architecture -->
+  <section class="py-24 px-6 md:px-20 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Part 02</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">重塑 <span class="text-gray-500 text-xl font-light">—— 双轮驱动AI架构</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">以端到端执行为主，智能分析为辅，构建企业级AI Agent系统。</p>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Main Wheel -->
+        <div class="glass-card rounded-2xl p-10 glow-blue hover:border-primary/40 transition">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center">
+              <i class="fas fa-cogs text-primary text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-white">主轮：业务神经系统</h3>
+              <p class="text-primary text-sm">端到端执行网络 Operational Agents</p>
+            </div>
+          </div>
+          <ul class="space-y-3">
+            <li v-for="item in mainWheel" :key="item" class="flex items-start gap-3 text-gray-300 text-sm">
+              <i class="fas fa-bolt text-primary mt-1 text-xs"></i>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
+        <!-- Sub Wheel -->
+        <div class="glass-card rounded-2xl p-10 glow-orange hover:border-accent/40 transition">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center">
+              <i class="fas fa-brain text-accent text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-white">辅轮：企业小脑</h3>
+              <p class="text-accent text-sm">智能分析网络 Analytical Agents</p>
+            </div>
+          </div>
+          <ul class="space-y-3">
+            <li v-for="item in subWheel" :key="item" class="flex items-start gap-3 text-gray-300 text-sm">
+              <i class="fas fa-lightbulb text-accent mt-1 text-xs"></i>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: 8 Nodes -->
+  <section class="py-24 px-6 md:px-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Part 03</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">主轮 <span class="text-gray-500 text-xl font-light">—— 8大节点全链路协同</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">AI总控为主轴，端到端贯穿8大业务节点。</p>
+
+      <!-- Mermaid 全链路架构图 -->
+      <div class="glass-card rounded-2xl p-6 md:p-10 mb-16 glow-blue relative">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fas fa-project-diagram text-primary"></i> 全链路AI决策中枢架构图
+          </h3>
+          <div class="flex items-center gap-2">
+            <button @click="zoomOut" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" title="缩小">
+              <i class="fas fa-minus text-xs"></i>
+            </button>
+            <span class="text-xs text-gray-500 w-12 text-center">{{ Math.round(chartZoom * 100) }}%</span>
+            <button @click="zoomIn" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" title="放大">
+              <i class="fas fa-plus text-xs"></i>
+            </button>
+            <button @click="zoomReset" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition" title="重置">
+              <i class="fas fa-undo text-xs"></i>
+            </button>
+            <button @click="openFullscreen" class="w-9 h-9 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/30 transition" title="全屏">
+              <i class="fas fa-expand text-xs"></i>
+            </button>
+          </div>
+        </div>
+        <div class="overflow-auto rounded-xl" style="max-height:600px" ref="chartWrap">
+          <div :style="{ transform: 'scale(' + chartZoom + ')', transformOrigin: 'top center', transition: 'transform 0.3s ease' }">
+            <div class="mermaid-chart flex justify-center" ref="mermaidContainer">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 全屏遮罩 -->
+      <teleport to="body">
+        <div v-if="fullscreen" class="fixed inset-0 z-50 bg-black/95 flex flex-col" @keydown.escape="closeFullscreen" @wheel.prevent="fsWheelZoom">
+          <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+            <h3 class="text-white font-bold flex items-center gap-2">
+              <i class="fas fa-project-diagram text-primary"></i> 全链路AI决策中枢架构图
+            </h3>
+            <div class="flex items-center gap-2">
+              <button @click="fsZoomOut" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition">
+                <i class="fas fa-minus text-xs"></i>
+              </button>
+              <span class="text-xs text-gray-500 w-12 text-center">{{ Math.round(fsZoom * 100) }}%</span>
+              <button @click="fsZoomIn" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition">
+                <i class="fas fa-plus text-xs"></i>
+              </button>
+              <button @click="fsZoomReset" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition">
+                <i class="fas fa-undo text-xs"></i>
+              </button>
+              <button @click="closeFullscreen" class="w-9 h-9 rounded-lg bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 hover:bg-red-500/30 transition">
+                <i class="fas fa-times text-xs"></i>
+              </button>
+            </div>
+          </div>
+          <div class="flex-1 overflow-auto flex items-center justify-center p-8">
+            <div :style="{ transform: 'scale(' + fsZoom + ')', transformOrigin: 'center center', transition: 'transform 0.3s ease' }" v-html="chartSvg"></div>
+          </div>
+          <div class="text-center py-3 text-gray-600 text-xs">按 ESC 退出全屏 · 滚轮缩放 · 拖拽移动</div>
+        </div>
+      </teleport>
+
+      <!-- 看图说话指南 -->
+      <div class="grid md:grid-cols-2 gap-6 mb-16">
+        <div v-for="(guide, i) in archGuides" :key="i" class="glass-card rounded-2xl p-6 hover:border-primary/30 transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
+                 :class="['bg-primary/20 text-primary', 'bg-blue-500/20 text-blue-400', 'bg-green-500/20 text-green-400', 'bg-accent/20 text-accent'][i]">
+              {{ i + 1 }}
+            </div>
+            <h4 class="font-bold text-white text-sm">{{ guide.title }}</h4>
+          </div>
+          <p class="text-gray-400 text-xs leading-relaxed">{{ guide.desc }}</p>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold text-white mb-8 flex items-center gap-2">
+        <i class="fas fa-stream text-primary"></i> 8大节点详解
+      </h3>
+
+      <div class="relative node-line pl-16 space-y-8">
+        <div v-for="(node, i) in nodes" :key="i" class="relative">
+          <div class="absolute left-[-40px] top-4 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm z-10"
+               :class="i < 4 ? 'bg-primary' : 'bg-accent'">
+            {{ i + 1 }}
+          </div>
+          <div class="glass-card rounded-2xl p-6 hover:border-primary/30 transition">
+            <div class="flex items-center gap-3 mb-2">
+              <i :class="node.icon" class="text-lg" :style="{color: i < 4 ? '#60a5fa' : '#f59e0b'}"></i>
+              <h3 class="text-lg font-bold text-white">{{ node.title }}</h3>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed">{{ node.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Smart Analysis -->
+  <section class="py-24 px-6 md:px-20 bg-gradient-to-b from-transparent via-accent/5 to-transparent">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-accent uppercase">Part 04</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">辅轮 <span class="text-gray-500 text-xl font-light">—— 数据飞轮，越干越聪明</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">事后人工盘点 → AI事前自动预警与自我纠错。</p>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div v-for="(scene, i) in scenes" :key="i" class="glass-card rounded-2xl p-8 hover:border-accent/30 transition">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+              <i :class="scene.icon" class="text-accent"></i>
+            </div>
+            <h3 class="font-bold text-white">{{ scene.title }}</h3>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-4">{{ scene.desc }}</p>
+          <div class="bg-accent/5 border border-accent/20 rounded-lg p-3">
+            <p class="text-accent text-xs font-medium"><i class="fas fa-arrow-right mr-1"></i>{{ scene.result }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Case Study -->
+  <section class="py-24 px-6 md:px-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Part 05</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">实战 <span class="text-gray-500 text-xl font-light">—— 定制化除湿智能柜案例</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">一个具体案例，展示AI如何端到端跑通业务。</p>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-for="(step, i) in caseSteps" :key="i" class="glass-card rounded-2xl p-6 relative overflow-hidden hover:border-primary/30 transition">
+          <div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-full"></div>
+          <span class="text-xs font-bold text-primary mb-3 block">{{ step.day }}</span>
+          <h3 class="font-bold text-white mb-2 text-sm">{{ step.title }}</h3>
+          <p class="text-gray-400 text-xs leading-relaxed">{{ step.desc }}</p>
+          <div v-if="i < caseSteps.length - 1" class="hidden lg:block absolute right-[-20px] top-1/2 transform -translate-y-1/2 z-10">
+            <i class="fas fa-chevron-right text-primary/30"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Roadmap -->
+  <section class="py-24 px-6 md:px-20 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Part 06</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">路径 <span class="text-gray-500 text-xl font-light">—— 三步走落地战略</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">稳扎稳打，打消实施风险顾虑。</p>
+
+      <div class="space-y-6">
+        <div v-for="(phase, i) in phases" :key="i" class="glass-card rounded-2xl p-8 hover:border-primary/30 transition">
+          <div class="flex flex-col md:flex-row md:items-start gap-6">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-xl"
+                   :class="['bg-primary/80', 'bg-primary', 'bg-accent'][i]">
+                P{{ i + 1 }}
+              </div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="font-bold text-white text-lg">{{ phase.title }}</h3>
+                <span class="text-xs px-3 py-1 rounded-full bg-white/5 text-gray-400">{{ phase.time }}</span>
+              </div>
+              <p class="text-gray-400 text-sm">{{ phase.desc }}</p>
+              <div class="mt-3 w-full bg-white/5 rounded-full overflow-hidden h-1">
+                <div class="phase-bar" :class="['bg-primary/60', 'bg-primary', 'bg-accent'][i]" :style="{width: phase.progress}"></div>
+              </div>
+              <!-- Phase sub-tasks -->
+              <div v-if="phase.tasks && phase.tasks.length" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div v-for="(task, j) in phase.tasks" :key="j"
+                     class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4 hover:border-primary/30 transition">
+                  <div class="flex items-center gap-2 mb-2">
+                    <i :class="task.icon" class="text-primary text-sm"></i>
+                    <span class="text-white text-sm font-medium">{{ task.label }}</span>
+                  </div>
+                  <p class="text-gray-500 text-xs leading-relaxed">{{ task.detail }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6-1: P1 Data Governance Detail -->
+  <section class="py-24 px-6 md:px-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Part 06 · P1 详案</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">数据治理 <span class="text-gray-500 text-xl font-light">—— 按端到端链路 × 8大部门节点</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">以人员与组织信息为底座，沿业务链路逐部门梳理数据资产。</p>
+
+      <!-- 基础底座：人员信息 -->
+      <div class="glass-card rounded-2xl p-8 mb-8 glow-blue hover:border-primary/40 transition">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+            <i class="fas fa-users-cog text-primary text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">基础底座：人员与组织信息</h3>
+            <p class="text-primary text-xs">AI总控派单、审批流转、能力匹配的前提</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div v-for="(item, i) in govBase" :key="i" class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <i :class="item.icon" class="text-primary text-sm"></i>
+              <span class="text-white text-sm font-medium">{{ item.label }}</span>
+            </div>
+            <p class="text-gray-500 text-xs leading-relaxed">{{ item.detail }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 各部门数据治理 -->
+      <div class="space-y-6">
+        <div v-for="(dept, i) in govDepts" :key="i" class="glass-card rounded-2xl p-8 hover:border-primary/30 transition">
+          <div class="flex items-center gap-4 mb-5">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm"
+                 :class="dept.color">
+              {{ i + 1 }}
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-white">{{ dept.name }}</h3>
+              <p class="text-gray-500 text-xs">{{ dept.role }}</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
+            <div v-for="(item, j) in dept.items" :key="j"
+                 class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4 hover:border-primary/20 transition">
+              <div class="flex items-center gap-2 mb-2">
+                <i :class="item.icon" class="text-sm" :style="{color: dept.accent}"></i>
+                <span class="text-white text-sm font-medium">{{ item.label }}</span>
+              </div>
+              <p class="text-gray-500 text-xs leading-relaxed">{{ item.detail }}</p>
+            </div>
+          </div>
+          <div class="bg-white/[0.02] border border-white/[0.05] rounded-lg p-3 flex items-start gap-2">
+            <i class="fas fa-check-circle text-green-500 text-xs mt-0.5"></i>
+            <p class="text-gray-400 text-xs">{{ dept.acceptance }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 执行节奏 -->
+      <div class="mt-12 glass-card rounded-2xl p-8">
+        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+          <i class="fas fa-calendar-alt text-primary"></i> 执行节奏（8周）
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/10">
+                <th class="text-left py-3 px-4 text-gray-400 font-medium">周次</th>
+                <th v-for="col in govTimeline.cols" :key="col" class="text-left py-3 px-4 text-gray-400 font-medium">{{ col }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, i) in govTimeline.rows" :key="i" class="border-b border-white/5">
+                <td class="py-3 px-4 text-primary font-medium">{{ row.week }}</td>
+                <td v-for="(cell, j) in row.cells" :key="j" class="py-3 px-4 text-gray-400 text-xs">{{ cell }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: ROI -->
+  <section class="py-24 px-6 md:px-20 bg-gradient-to-b from-transparent via-accent/5 to-transparent">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-xs font-bold tracking-widest text-accent uppercase">Part 07</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">价值 <span class="text-gray-500 text-xl font-light">—— 商业回报与战略意义</span></h2>
+      <p class="text-gray-500 mb-12 max-w-2xl">落实到财务和企业战略指标。</p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div v-for="(roi, i) in roiItems" :key="i" class="glass-card rounded-2xl p-8 text-center hover:border-accent/30 transition group">
+          <div class="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center group-hover:scale-110 transition"
+               :class="['bg-green-500/10', 'bg-blue-500/10', 'bg-purple-500/10'][i]">
+            <i :class="roi.icon" class="text-2xl" :style="{color: ['#22c55e','#3b82f6','#a855f7'][i]}"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">{{ roi.title }}</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">{{ roi.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 text-center border-t border-white/5">
+    <p class="gradient-text text-2xl font-bold mb-3">业务跑得越多，系统越聪明</p>
+    <p class="text-gray-500 text-sm">这就是我们最核心的护城河</p>
+    <div class="mt-8 flex justify-center gap-4">
+      <span class="text-xs text-gray-600"><i class="fas fa-microchip mr-1"></i>AI决策中枢</span>
+      <span class="text-xs text-gray-600"><i class="fas fa-link mr-1"></i>端到端协同</span>
+      <span class="text-xs text-gray-600"><i class="fas fa-brain mr-1"></i>自进化引擎</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// P1 数据治理详案数据
+const GOV_BASE = [
+  { icon: 'fas fa-sitemap', label: '组织架构', detail: '8大部门正式架构、部门负责人、上级汇报关系、岗位清单与编制人数' },
+  { icon: 'fas fa-id-badge', label: '人员档案', detail: '姓名/工号/部门/岗位/联系方式，能力标签（擅长柜型/模块），权限与状态标签' },
+  { icon: 'fas fa-project-diagram', label: '审批链', detail: '每个业务节点的审批人与替补审批人，跨部门协作对接人映射表' },
+  { icon: 'fas fa-user-tag', label: '可分配人员池', detail: 'AI派单时的能力匹配依据：谁能接结构任务、谁能接硬件任务、按区域×技能分配' }
+]
+const GOV_DEPTS = [
+  { name:'销售部', role:'节点1：需求入口 — 客户需求、报价、订单', color:'bg-blue-600', accent:'#60a5fa', items:[
+    { icon:'fas fa-address-book', label:'客户档案', detail:'客户名称、行业、联系人、历史订单数、合作等级、偏好标签（常订柜型/价格敏感度/交期要求）' },
+    { icon:'fas fa-comments', label:'历史需求库', detail:'过往订单原始需求描述 → 结构化表单的映射关系，作为AI"需求解析"训练数据' },
+    { icon:'fas fa-file-invoice-dollar', label:'报价档案', detail:'历史报价单（柜型/配置/金额/成本/利润率），按柜型分类的标准报价模板' },
+    { icon:'fas fa-user-tie', label:'人员映射', detail:'销售人员 → 负责客户映射，销售人员 → 擅长柜型/行业标签' }
+  ], acceptance:'验收：历史订单需求入库 ≥ 近2年全量，报价模板覆盖所有标准柜型' },
+  { name:'结构设计部', role:'节点2：空间与图纸 — 3D图纸、结构方案、材质选型', color:'bg-blue-500', accent:'#60a5fa', items:[
+    { icon:'fas fa-drafting-compass', label:'图纸库', detail:'按柜型→模块分级归档，打标签（柜型/模块/材质/场景/设计师），版本管理+变更记录必填' },
+    { icon:'fas fa-ruler-combined', label:'结构规则库', detail:'空间约束规则、材质选型规则、历史冲突记录（哪些模块组合出过问题及解决方案）' },
+    { icon:'fas fa-star', label:'黄金模板', detail:'复用率高、反馈好的成熟结构方案单独标记，记录适用条件和限制条件' },
+    { icon:'fas fa-user-cog', label:'人员映射', detail:'结构工程师 → 擅长柜型/模块标签，图纸评审人 → 审批权限' }
+  ], acceptance:'验收：图纸入库 ≥ 近2年全量，标签覆盖率 ≥ 90%，结构规则 ≥ 20条' },
+  { name:'硬件部', role:'节点3：电路与BOM — BOM清单、电路方案、元器件信息', color:'bg-indigo-500', accent:'#818cf8', items:[
+    { icon:'fas fa-barcode', label:'BOM主数据', detail:'统一编码（大类-小类-规格-版本），必填字段：规格/供应商/单价/起订量/交期/停产状态，BOM层级关系' },
+    { icon:'fas fa-exclamation-triangle', label:'元器件风险库', detail:'停产/即将停产清单+替代物料，价格波动大的元器件标记，历史故障率黑名单' },
+    { icon:'fas fa-bolt', label:'电路设计规则库', detail:'负载计算规则、主板与传感器兼容性矩阵、历史BOM打回记录及修改方案' },
+    { icon:'fas fa-user-cog', label:'人员映射', detail:'硬件工程师 → 擅长模块标签（电源/通信/传感器），BOM审核人 → 审批权限' }
+  ], acceptance:'验收：BOM编码唯一率 100%，字段完整率 ≥ 95%，停产标记覆盖率 100%' },
+  { name:'软件部', role:'节点4：控制程序与IoT — 代码库、协议文档、接口规范', color:'bg-violet-500', accent:'#a78bfa', items:[
+    { icon:'fas fa-code', label:'代码与方案库', detail:'按功能模块归档（控制/通信/OTA/监控），标记适用柜型和依赖硬件版本，成熟模块标"可复用"' },
+    { icon:'fas fa-network-wired', label:'IoT协议文档库', detail:'各柜型通信协议规范、设备端↔云端接口定义、第三方平台对接文档' },
+    { icon:'fas fa-bug', label:'软件设计规则库', detail:'协议选型规则、软件×硬件版本兼容矩阵、高频bug记录与修复方案' },
+    { icon:'fas fa-user-cog', label:'人员映射', detail:'软件工程师 → 擅长领域标签（嵌入式/云端/协议），代码评审人 → 审批权限' }
+  ], acceptance:'验收：协议文档覆盖所有在产柜型，可复用模块标记 ≥ 15个' },
+  { name:'行政部', role:'节点5：资源调度 — 会议记录、资源排期、审批流程', color:'bg-amber-600', accent:'#f59e0b', items:[
+    { icon:'fas fa-warehouse', label:'资源台账', detail:'打样车间（设备/时段/预约）、测试设备（状态/负责人）、会议室（容量/配置/规则）' },
+    { icon:'fas fa-clipboard-list', label:'流程模板库', detail:'各类审批流程模板（打样/采购/出差），每个流程的节点、审批人、预计耗时' },
+    { icon:'fas fa-chart-bar', label:'历史审批数据', detail:'平均审批耗时、卡点环节分析，为AI优化调度提供基线数据' },
+    { icon:'fas fa-user-cog', label:'人员映射', detail:'行政人员 → 负责资源类型映射，各流程审批链中的行政节点确认' }
+  ], acceptance:'验收：资源台账完整率 ≥ 95%，流程模板覆盖所有常规审批类型' },
+  { name:'第三方供应商', role:'节点6：供应链 — 报价、交期、质量记录', color:'bg-emerald-600', accent:'#34d399', items:[
+    { icon:'fas fa-building', label:'供应商档案', detail:'基础信息（全称/信用代码/品类/联系人）、商务信息（账期/起订量/交期/API能力）' },
+    { icon:'fas fa-medal', label:'供应商分级', detail:'A核心/B备选/C观察/D淘汰，基于交期达成率+次品率评定，分级影响AI派单权重' },
+    { icon:'fas fa-exchange-alt', label:'历史交易数据', detail:'采购订单（物料/数量/单价/交期承诺vs实际）、来料质检记录、退货记录' },
+    { icon:'fas fa-shield-alt', label:'风险信息', detail:'是否独家供应、替代供应商编码、最近质量事故记录、绩效评分（价格/配合度）' }
+  ], acceptance:'验收：基础信息完整率 ≥ 98%，绩效数据覆盖 ≥ 80%，分级覆盖 100%' },
+  { name:'运维部门', role:'节点7：交付与售后 — 交付记录、IoT数据、售后工单', color:'bg-orange-500', accent:'#fb923c', items:[
+    { icon:'fas fa-clipboard-check', label:'交付验收数据', detail:'按柜型定义验收检查清单（功能自检/参数核对/外观），历史交付记录与遗留问题' },
+    { icon:'fas fa-satellite-dish', label:'IoT设备台账', detail:'已交付设备清单（编号/柜型/地点/客户/上线日期），设备状态，传感器配置' },
+    { icon:'fas fa-headset', label:'售后工单库', detail:'历史工单（故障描述/原因/方案/耗时），高频故障TOP10，常见故障标准处理流程' },
+    { icon:'fas fa-user-cog', label:'人员映射', detail:'运维/售后工程师 → 负责区域+擅长柜型标签，派单规则：按区域×技能匹配' }
+  ], acceptance:'验收：设备台账覆盖所有已交付设备，历史工单入库 ≥ 近1年全量' },
+  { name:'数据小脑', role:'节点8：分析基础 — 汇聚全链路数据，支撑认知轮', color:'bg-orange-600', accent:'#ea580c', items:[
+    { icon:'fas fa-link', label:'全链路追溯模型', detail:'客户需求→BOM→图纸→供应商→交付设备→售后工单，端到端可追溯' },
+    { icon:'fas fa-users', label:'人员归因模型', detail:'人员→部门→任务→产出，全链路可归因，支撑绩效分析和能力画像' },
+    { icon:'fas fa-heartbeat', label:'数据质量监控', detail:'每周自动校验（完整性/一致性/关联性），按部门展示质量看板，低于90%自动告警' }
+  ], acceptance:'验收：全链路关联模型上线，数据质量看板覆盖所有部门' }
+]
+const GOV_TIMELINE = {
+  cols: ['各部门数据', '人员信息', '数据仓库'],
+  rows: [
+    { week:'第1-2周', cells:['各部门摸底盘点','全员信息采集+能力标签','技术选型+数据模型设计'] },
+    { week:'第2-3周', cells:['各部门数据规范制定','审批链与对接人确认','开发部署'] },
+    { week:'第3-6周', cells:['并行清洗、归档、入库','人员池与派单规则配置','数据导入+校验脚本'] },
+    { week:'第6-8周', cells:['全链路关联校验+验收','组织信息终验','质量监控上线'] }
+  ]
+}
+
+const { createApp } = Vue
+
+createApp({
+  data() {
+    return {
+      chartZoom: 1,
+      fsZoom: 1,
+      fullscreen: false,
+      chartSvg: '',
+      govBase: GOV_BASE,
+      govDepts: GOV_DEPTS,
+      govTimeline: GOV_TIMELINE,
+      pains: [
+        {
+          icon: 'fas fa-border-all',
+          title: '部门墙导致协同断层',
+          desc: '销售接单后，结构/硬件/软件多头评估耗时长，BOM打回率高，非标需求在部门间反复流转。'
+        },
+        {
+          icon: 'fas fa-box-open',
+          title: '供应链管控黑盒',
+          desc: '第三方生产供应商交期不可控，询价比价依赖人工，缺乏实时风险预警机制。'
+        },
+        {
+          icon: 'fas fa-fire-extinguisher',
+          title: '售后运维被动救火',
+          desc: 'IoT设备虽然联网，但运维多为事后处理，未形成反哺研发的数据闭环。'
+        }
+      ],
+      mainWheel: [
+        '系统的"手眼"，负责跑通单据，100%覆盖订单从下达到交付的物理流程',
+        '实时响应、跨部门指令自动分发，消灭协同等待',
+        '从销售需求解析到供应商派单，全链路自动化执行'
+      ],
+      subWheel: [
+        '系统的"小脑"，不直接干预生产，负责监控、复盘与策略优化',
+        '经验沉淀、根因挖掘，驱动企业底层知识库自进化',
+        '将"坏数据"转化为优化规则，持续提升系统智能水平'
+      ],
+      nodes: [
+        {
+          icon: 'fas fa-handshake',
+          title: '销售部 — 需求一键解析',
+          desc: 'AI将自然语言转化为标准工程需求，秒级调用历史库输出《初步可行性与报价参考》。'
+        },
+        {
+          icon: 'fas fa-drafting-compass',
+          title: '结构设计部 — 空间校验与3D图纸',
+          desc: 'AI检索图纸库，自动校验"除湿/制冷模块"的物理空间结构冲突，输出材质建议。'
+        },
+        {
+          icon: 'fas fa-microchip',
+          title: '硬件部 — 主板与电路BOM',
+          desc: 'AI自动审核BOM清单，排查电路负载与元器件停产风险，确保硬件方案可行。'
+        },
+        {
+          icon: 'fas fa-code',
+          title: '软件部 — 控制程序与IoT协议',
+          desc: 'AI提取IoT通信协议需求，自动匹配历史成熟代码库与对接文档。'
+        },
+        {
+          icon: 'fas fa-calendar-check',
+          title: '行政部 — 智能资源调度',
+          desc: 'AI接管跨部门会议协调、内部测试资源排期与流转审批，实现全要素覆盖。'
+        },
+        {
+          icon: 'fas fa-truck',
+          title: '第三方供应商 — 智能供应链',
+          desc: 'AI直连供应商系统，根据BOM单自动询价、派单，追踪备料与生产进度。'
+        },
+        {
+          icon: 'fas fa-tools',
+          title: '运维部门 — 交付验收与预测性维护',
+          desc: '智能柜出厂后，AI协助交付验收（功能自检、参数核对），上线后通过IoT流数据实时监控，在故障前自动生成工单派发至售后。'
+        },
+        {
+          icon: 'fas fa-brain',
+          title: '数据小脑 — 复盘与进化',
+          desc: '所有异常数据汇聚至分析智能体，半夜自动复盘，次日将优化规则写入总控系统。'
+        }
+      ],
+      archGuides: [
+        {
+          title: '看中轴 — 双轮驱动',
+          desc: '蓝色菱形是"执行轮（总控智能体）"，负责低头拉车把流程跑通；橙色圆形是"认知轮（分析智能体）"，负责抬头看路做复盘和沉淀。'
+        },
+        {
+          title: '看左上 — 销售与拆单',
+          desc: '销售把需求输入给AI总控，总控一秒钟把任务拆解，并行派发给结构、硬件、软件三个部门，同时通知行政部准备打样资源，消灭部门墙。'
+        },
+        {
+          title: '看下方 — 供应商',
+          desc: '图纸定稿后AI直接拿着BOM单对接第三方供应商，自动比价、自动派单，把供应链变成"白盒"。'
+        },
+        {
+          title: '看右侧 — 闭环与进化',
+          desc: '所有"坏数据"流向数据小脑，半夜自动复盘，第二天把优化规则写进总控。业务跑得越多，系统越聪明——这就是最核心的护城河。'
+        }
+      ],
+      scenes: [
+        {
+          icon: 'fas fa-search',
+          title: '供应链质量自动复盘',
+          desc: 'AI小脑发现某批次智能柜锁具故障率突增，自动穿透数据溯源至"C号供应商的某批次微动开关"。',
+          result: '生成建议并经人工确认后，自动调整后续派单权重'
+        },
+        {
+          icon: 'fas fa-ruler-combined',
+          title: '非标设计隐性成本挖掘',
+          desc: 'AI小脑发现结构部在"户外防水智能柜"上反复改图，自动分析并提炼标准模块规范。',
+          result: '更新至企业知识库，下次研发直接调用，减少重复劳动'
+        }
+      ],
+      caseSteps: [
+        {
+          day: 'Day 1 · 接单',
+          title: '需求秒级拆解',
+          desc: '销售输入需求，AI总控拆解任务，秒级分发给结构/硬件/软件三个部门。'
+        },
+        {
+          day: 'Day 2 · 研发',
+          title: '跨部门自动协同',
+          desc: '硬件Agent发现除湿模块功率超标，自动与结构Agent协商，推荐更换风道方案并更新BOM。'
+        },
+        {
+          day: 'Day 3 · 供应链',
+          title: '智能询价派单',
+          desc: '方案定稿后AI向三家核心供应商发单并锁定交期，行政部同步收到流程报备。'
+        },
+        {
+          day: 'Day X · 售后',
+          title: '闭环复盘迭代',
+          desc: '交付6个月后运维Agent捕捉除湿效率下降趋势，派单维护，分析Agent反馈结构部做V2迭代。'
+        }
+      ],
+      phases: [
+        {
+          title: '数字基建与"副驾驶"跑通',
+          time: '3-6个月',
+          desc: '夯实数据地基，AI以"副驾驶"模式辅助关键岗位，建立人机协同信任。',
+          progress: '33%',
+          tasks: [
+            { icon: 'fas fa-database', label: '数据治理与入库', detail: 'BOM清单、图纸版本、供应商名录统一清洗，建立字段命名与质量校验标准，搭建数据仓库' },
+            { icon: 'fas fa-layer-group', label: '数据标准化体系', detail: '制定BOM编码规范、图纸版本管理流程、供应商评级字段标准，确保后续AI可消费' },
+            { icon: 'fas fa-user-check', label: 'AI辅助填表+人工校验', detail: '销售端AI辅助将自然语言转为结构化需求表单，人工确认后流转，逐步积累训练数据' },
+            { icon: 'fas fa-clipboard-list', label: '行政与运维副驾驶', detail: 'AI在会议协调、资源排期、运维工单环节提供建议提示，人工一键确认执行' },
+            { icon: 'fas fa-file-invoice', label: 'AI生成询价单+人工发送', detail: '供应商对接先走半自动模式：AI根据BOM生成询价文档，人工审核后发送，积累比价数据' },
+            { icon: 'fas fa-shield-alt', label: '分级决策机制', detail: '标准件走自动化快速通道，复杂非标件走"AI建议+人工确认"双保险路径' }
+          ]
+        },
+        {
+          title: '端到端"主轮"贯通',
+          time: '6-12个月',
+          desc: '打通结构、硬件、软件与第三方供应商的协同壁垒。实现标准智能柜流程的"半自动驾驶"。',
+          progress: '66%',
+          tasks: []
+        },
+        {
+          title: '引入"辅轮"与自我进化',
+          time: '12个月以后',
+          desc: '上线智能分析Agent，接入IoT设备海量运行数据，全面开启"感知-执行-复盘-优化"的无人工干预闭环。',
+          progress: '100%',
+          tasks: []
+        }
+      ],
+      roiItems: [
+        {
+          icon: 'fas fa-piggy-bank',
+          title: '直接降本',
+          desc: '通过精准BOM审核与供应商比价，显著降低原材料与制造成本。'
+        },
+        {
+          icon: 'fas fa-rocket',
+          title: '极致增效',
+          desc: '非标智能柜从"销售需求"到"下发生产"的协同周期大幅缩短。'
+        },
+        {
+          icon: 'fas fa-shield-alt',
+          title: '核心壁垒',
+          desc: '从"依赖核心老员工"转变为"将专有Know-how永久沉淀在AI大脑中"，打造数字原生企业。'
+        }
+      ]
+    }
+  },
+  methods: {
+    zoomIn() { this.chartZoom = Math.min(this.chartZoom + 0.2, 3) },
+    zoomOut() { this.chartZoom = Math.max(this.chartZoom - 0.2, 0.3) },
+    zoomReset() { this.chartZoom = 1 },
+    fsZoomIn() { this.fsZoom = Math.min(this.fsZoom + 0.2, 3) },
+    fsZoomOut() { this.fsZoom = Math.max(this.fsZoom - 0.2, 0.3) },
+    fsZoomReset() { this.fsZoom = 1 },
+    openFullscreen() {
+      const svg = document.querySelector('.mermaid-chart svg')
+      if (svg) this.chartSvg = svg.outerHTML
+      this.fsZoom = 1.2
+      this.fullscreen = true
+      document.body.style.overflow = 'hidden'
+      this.$nextTick(() => {
+        const handler = (e) => {
+          if (e.key === 'Escape') this.closeFullscreen()
+        }
+        this._escHandler = handler
+        document.addEventListener('keydown', handler)
+      })
+    },
+    closeFullscreen() {
+      this.fullscreen = false
+      document.body.style.overflow = ''
+      if (this._escHandler) {
+        document.removeEventListener('keydown', this._escHandler)
+        this._escHandler = null
+      }
+    },
+    fsWheelZoom(e) {
+      if (e.deltaY < 0) this.fsZoomIn()
+      else this.fsZoomOut()
+    }
+  },
+  mounted() {
+    // Inject mermaid chart via JS to avoid Vue template compilation issues
+    const mermaidCode = `graph TD
+    classDef aiHub fill:#2D5A9E,stroke:#fff,stroke-width:2px,color:#fff,font-weight:bold
+    classDef aiBrain fill:#E67E22,stroke:#fff,stroke-width:2px,color:#fff,font-weight:bold
+    classDef dept fill:#1e293b,stroke:#2D5A9E,stroke-width:1px,color:#e2e8f0
+    classDef external fill:#1a2332,stroke:#17A589,stroke-width:1px,color:#a7f3d0
+    Customer((客户需求)) -->|非标定制/批量订单| Sales[1. 销售部]
+    class Customer,Sales dept
+    subgraph AI双轮驱动中枢
+        direction TB
+        Hub{AI项目总控智能体 - 执行轮}
+        Brain((数据分析智能体 - 认知轮))
+    end
+    class Hub aiHub
+    class Brain aiBrain
+    Sales -->|录入自然语言需求| Hub
+    subgraph 研发与资源协同
+        direction LR
+        Admin[4. 行政部]
+        Struct[5. 结构设计部]
+        Hard[6. 硬件部]
+        Soft[7. 软件部]
+    end
+    class Admin,Struct,Hard,Soft dept
+    Hub ==任务拆解==> Struct
+    Hub ==任务拆解==> Hard
+    Hub ==任务拆解==> Soft
+    Hub -.调度资源.-> Admin
+    Struct & Hard & Soft ==>|BOM合并与校验| Hub
+    subgraph 生产与供应链
+        Supplier[[8. 第三方供应商]]
+    end
+    class Supplier external
+    Hub ==智能询价与派单==> Supplier
+    subgraph 运维与售后
+        Ops[运维部门 - 交付验收/故障预警/售后派单]
+        Device((智能柜IoT))
+    end
+    class Ops dept
+    class Device external
+    Supplier -->|生产交付| Device
+    Supplier -.交付验收协同.-> Ops
+    Device -.运行数据.-> Ops
+    Ops -.异常数据.-> Brain
+    Supplier -.交期与质量数据.-> Brain
+    Struct & Hard -.设计反馈数据.-> Brain
+    Brain -.深度复盘.-> Brain
+    Brain ==优化策略==> Hub`
+
+    const container = this.$refs.mermaidContainer
+    if (container) {
+      const pre = document.createElement('pre')
+      pre.className = 'mermaid'
+      pre.textContent = mermaidCode
+      container.appendChild(pre)
+    }
+
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0a0a1a',
+        primaryColor: '#2D5A9E',
+        secondaryColor: '#E67E22',
+        tertiaryColor: '#1e293b',
+        primaryTextColor: '#e2e8f0',
+        lineColor: '#475569',
+        fontSize: '14px'
+      }
+    })
+    mermaid.run({ querySelector: '.mermaid' })
+
+    this.$nextTick(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible')
+          }
+        })
+      }, { threshold: 0.1 })
+
+      document.querySelectorAll('.glass-card').forEach(el => {
+        el.classList.add('fade-in')
+        observer.observe(el)
+      })
+    })
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

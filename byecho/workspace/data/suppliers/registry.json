@@ -1,0 +1,55 @@
+{
+  "suppliers": [
+    {
+      "code": "S001",
+      "name": "深圳芯创电子",
+      "category": ["MCU", "通信模组", "传感器"],
+      "level": "A",
+      "contact": "[联系人]",
+      "phone": "[电话]",
+      "delivery_days": 7,
+      "payment_terms": "月结30天",
+      "metrics": {
+        "on_time_rate": 0.95,
+        "defect_rate": 0.003,
+        "price_score": 0.85,
+        "cooperation_score": 0.92
+      },
+      "risk_flags": []
+    },
+    {
+      "code": "S005",
+      "name": "东莞精密五金",
+      "category": ["锁具", "微动开关", "结构件"],
+      "level": "B",
+      "contact": "[联系人]",
+      "phone": "[电话]",
+      "delivery_days": 10,
+      "payment_terms": "月结45天",
+      "metrics": {
+        "on_time_rate": 0.88,
+        "defect_rate": 0.023,
+        "price_score": 0.90,
+        "cooperation_score": 0.75
+      },
+      "risk_flags": ["近期微动开关批次故障率偏高", "无替代供应商覆盖锁具品类"]
+    },
+    {
+      "code": "S007",
+      "name": "宁波制冷科技",
+      "category": ["除湿模块", "散热组件"],
+      "level": "A",
+      "contact": "[联系人]",
+      "phone": "[电话]",
+      "delivery_days": 12,
+      "payment_terms": "预付30%+月结",
+      "metrics": {
+        "on_time_rate": 0.92,
+        "defect_rate": 0.005,
+        "price_score": 0.80,
+        "cooperation_score": 0.88
+      },
+      "risk_flags": ["除湿片为独家供应"]
+    }
+  ]
+}

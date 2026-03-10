@@ -1,0 +1,120 @@
+{
+  "cabinet_type": "室内标准智能柜",
+  "version": "V3.2",
+  "modules": [
+    {
+      "module": "主控模块",
+      "components": [
+        {
+          "code": "MCU-STM32F407",
+          "name": "STM32F407主控芯片",
+          "spec": "ARM Cortex-M4, 168MHz",
+          "supplier_codes": ["S001", "S003"],
+          "unit_price": 35.00,
+          "quantity": 1,
+          "status": "active",
+          "alternatives": ["MCU-STM32F429"]
+        },
+        {
+          "code": "PWR-LM2596",
+          "name": "DC-DC降压模块",
+          "spec": "24V转5V/3A",
+          "supplier_codes": ["S002"],
+          "unit_price": 8.50,
+          "quantity": 2,
+          "status": "active",
+          "alternatives": []
+        }
+      ]
+    },
+    {
+      "module": "通信模块",
+      "components": [
+        {
+          "code": "WIFI-ESP32S3",
+          "name": "ESP32-S3 WiFi模组",
+          "spec": "WiFi+BLE5.0, 4MB Flash",
+          "supplier_codes": ["S001"],
+          "unit_price": 22.00,
+          "quantity": 1,
+          "status": "active",
+          "alternatives": ["WIFI-RTL8720"]
+        },
+        {
+          "code": "4G-EC20",
+          "name": "移远EC20 4G模组",
+          "spec": "全网通Cat.4",
+          "supplier_codes": ["S004"],
+          "unit_price": 68.00,
+          "quantity": 1,
+          "status": "active",
+          "alternatives": ["4G-SIM7600"]
+        }
+      ]
+    },
+    {
+      "module": "锁控模块",
+      "components": [
+        {
+          "code": "LOCK-EM01",
+          "name": "电磁锁",
+          "spec": "12V/0.5A, 常闭型",
+          "supplier_codes": ["S005", "S006"],
+          "unit_price": 15.00,
+          "quantity": 24,
+          "status": "active",
+          "alternatives": []
+        },
+        {
+          "code": "SW-MICRO-01",
+          "name": "微动开关",
+          "spec": "检测行程3mm",
+          "supplier_codes": ["S005"],
+          "unit_price": 1.20,
+          "quantity": 24,
+          "status": "warning",
+          "status_note": "S005近期批次故障率偏高(2.3%)",
+          "alternatives": ["SW-MICRO-02"]
+        }
+      ]
+    },
+    {
+      "module": "除湿模块",
+      "components": [
+        {
+          "code": "DH-TEC-60W",
+          "name": "半导体除湿片",
+          "spec": "TEC1-12706, 60W",
+          "supplier_codes": ["S007"],
+          "unit_price": 28.00,
+          "quantity": 2,
+          "status": "active",
+          "alternatives": ["DH-TEC-40W"]
+        },
+        {
+          "code": "FAN-8025",
+          "name": "散热风扇",
+          "spec": "80x80x25mm, 12V/0.2A",
+          "supplier_codes": ["S007", "S002"],
+          "unit_price": 12.00,
+          "quantity": 2,
+          "status": "active",
+          "alternatives": []
+        },
+        {
+          "code": "SENSOR-DHT22",
+          "name": "温湿度传感器",
+          "spec": "DHT22, ±2%RH",
+          "supplier_codes": ["S001"],
+          "unit_price": 9.50,
+          "quantity": 2,
+          "status": "active",
+          "alternatives": ["SENSOR-SHT30"]
+        }
+      ]
+    }
+  ],
+  "total_estimated_cost": 1285.40,
+  "power_budget_watts": 180,
+  "max_power_watts": 220
+}

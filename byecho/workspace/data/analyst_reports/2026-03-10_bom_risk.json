@@ -1,0 +1,85 @@
+{
+  "type": "bom_risk_review",
+  "timestamp": "2026-03-10T16:44:00+08:00",
+  "bom_template": "standard_indoor.json",
+  "findings": [
+    {
+      "component": "SW-MICRO-01",
+      "name": "微动开关",
+      "issue": "元器件状态为warning，且为单一供应商依赖",
+      "severity": "high",
+      "details": {
+        "status": "warning",
+        "status_note": "S005 近期批次故障率偏高 (2.3%)",
+        "supplier_count": 1,
+        "supplier_codes": ["S005"],
+        "has_alternatives": true,
+        "alternatives": ["SW-MICRO-02"]
+      },
+      "recommendation": "立即切换至替代型号 SW-MICRO-02；验证 S005 整改后重新评估"
+    },
+    {
+      "component": "PWR-LM2596",
+      "name": "DC-DC 降压模块",
+      "issue": "单一供应商依赖且无替代方案",
+      "severity": "medium",
+      "details": {
+        "status": "active",
+        "supplier_count": 1,
+        "supplier_codes": ["S002"],
+        "has_alternatives": false,
+        "alternatives": []
+      },
+      "recommendation": "启动替代方案开发或寻找第二供应商"
+    },
+    {
+      "component": "LOCK-EM01",
+      "name": "电磁锁",
+      "issue": "无替代方案",
+      "severity": "low",
+      "details": {
+        "status": "active",
+        "supplier_count": 2,
+        "supplier_codes": ["S005", "S006"],
+        "has_alternatives": false,
+        "alternatives": []
+      },
+      "recommendation": "建议开发替代型号以降低风险"
+    },
+    {
+      "component": "FAN-8025",
+      "name": "散热风扇",
+      "issue": "无替代方案",
+      "severity": "low",
+      "details": {
+        "status": "active",
+        "supplier_count": 2,
+        "supplier_codes": ["S007", "S002"],
+        "has_alternatives": false,
+        "alternatives": []
+      },
+      "recommendation": "建议开发替代型号以降低风险"
+    },
+    {
+      "component": "POWER_BUDGET",
+      "name": "系统功率预算",
+      "issue": "功率预算使用率81.8%，超过75%警戒线",
+      "severity": "medium",
+      "details": {
+        "current_watts": 180,
+        "max_watts": 220,
+        "usage_ratio": 0.818,
+        "threshold": 0.75
+      },
+      "recommendation": "优化低功耗设计或升级电源模块；新增功能时需严格评估功率余量"
+    }
+  ],
+  "summary": {
+    "total_components": 10,
+    "high_severity": 1,
+    "medium_severity": 2,
+    "low_severity": 2,
+    "single_supplier_count": 2,
+    "no_alternative_count": 4
+  }
+}

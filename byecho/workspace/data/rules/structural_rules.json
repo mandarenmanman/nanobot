@@ -1,0 +1,49 @@
+{
+  "rules": [
+    {
+      "id": "SR-001",
+      "name": "除湿模块空间校验",
+      "description": "除湿模块(TEC)需要预留风道空间，最小净空高度80mm，进出风口不可被其他模块遮挡",
+      "applies_to": ["除湿模块"],
+      "check_type": "space_constraint",
+      "params": {
+        "min_clearance_mm": 80,
+        "airflow_direction": "bottom_to_top",
+        "blocked_by_exclusion": ["锁控模块", "主控模块"]
+      }
+    },
+    {
+      "id": "SR-002",
+      "name": "户外防水等级",
+      "description": "户外柜体必须达到IP55以上防护等级，所有接缝需加密封胶条",
+      "applies_to": ["户外防水柜", "户外标准柜"],
+      "check_type": "material_constraint",
+      "params": {
+        "min_ip_rating": "IP55",
+        "required_materials": ["密封胶条", "防水接头", "排水孔"]
+      }
+    },
+    {
+      "id": "SR-003",
+      "name": "电路负载校验",
+      "description": "总功耗不得超过电源额定功率的80%，单路锁控电流不超过1A",
+      "applies_to": ["*"],
+      "check_type": "power_constraint",
+      "params": {
+        "max_load_ratio": 0.8,
+        "max_lock_current_a": 1.0
+      }
+    },
+    {
+      "id": "SR-004",
+      "name": "除湿功率与柜体体积匹配",
+      "description": "每立方米柜体空间需要至少40W除湿功率，超过60W需增加散热风道",
+      "applies_to": ["除湿模块"],
+      "check_type": "capacity_match",
+      "params": {
+        "min_watts_per_m3": 40,
+        "extra_cooling_threshold_watts": 60
+      }
+    }
+  ]
+}

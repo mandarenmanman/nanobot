@@ -1,0 +1,88 @@
+{
+  "type": "sanqing_inspection",
+  "aspect": "道德·进化",
+  "timestamp": "2026-03-10T17:47:00+08:00",
+  "period": "2026-W11",
+  "executive_summary": "本周三清巡检发现2项高风险问题，需优先处理：(1) S005供应商次品率超标；(2) SW-MICRO-01微动开关需紧急切换替代型号",
+  "findings_by_category": {
+    "supplier_quality": {
+      "total_issues": 2,
+      "critical": 1,
+      "details": "S005次品率2.3%超阈值；S007独家供应风险"
+    },
+    "bom_risk": {
+      "total_issues": 5,
+      "critical": 1,
+      "details": "SW-MICRO-01状态warning；功率预算81.8%超警戒线；4个元器件无替代方案"
+    },
+    "order_execution": {
+      "total_issues": 0,
+      "critical": 0,
+      "details": "无活跃订单，无需复盘"
+    },
+    "after_sales": {
+      "total_issues": 0,
+      "critical": 0,
+      "details": "无工单数据，无法分析"
+    }
+  },
+  "action_items": [
+    {
+      "priority": "P0",
+      "action": "暂停S005微动开关新订单",
+      "owner": "供应链部",
+      "deadline": "2026-03-12"
+    },
+    {
+      "priority": "P0",
+      "action": "切换BOM至SW-MICRO-02替代型号",
+      "owner": "硬件部",
+      "deadline": "2026-03-15"
+    },
+    {
+      "priority": "P1",
+      "action": "启动S005降级评估流程",
+      "owner": "供应链部",
+      "deadline": "2026-03-20"
+    },
+    {
+      "priority": "P1",
+      "action": "除湿片第二供应商寻源",
+      "owner": "供应链部",
+      "deadline": "2026-03-31"
+    },
+    {
+      "priority": "P2",
+      "action": "功率预算优化方案评估",
+      "owner": "硬件部",
+      "deadline": "2026-04-10"
+    }
+  ],
+  "rules_update_suggestions": [
+    {
+      "rule_id": "SR-005",
+      "name": "供应商次品率阈值",
+      "suggestion": "新增规则：当供应商次品率连续2个批次超过2%时，自动触发降级流程"
+    },
+    {
+      "rule_id": "SR-006",
+      "name": "单一供应商风险",
+      "suggestion": "新增规则：关键元器件（锁控、电源）必须有≥2个供应商或≥1个已验证替代方案"
+    },
+    {
+      "rule_id": "SR-007",
+      "name": "功率预算警戒",
+      "suggestion": "新增规则：BOM功率预算使用率超过75%时，需硬件部负责人审批后方可新增功能"
+    }
+  ],
+  "knowledge_base_updates": [
+    {
+      "topic": "微动开关故障模式",
+      "content": "S005微动开关批次故障率2.3%，主要表现为接触不良和行程失效。建议入库检验增加行程测试和接触电阻测试。"
+    },
+    {
+      "topic": "除湿片供应风险",
+      "content": "DH-TEC-60W为S007独家供应，建议建立3个月安全库存，同时寻源第二供应商（可考虑进口品牌如Marlow、Laird）。"
+    }
+  ]
+}

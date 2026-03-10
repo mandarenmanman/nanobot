@@ -1,0 +1,25 @@
+{
+  "id": "C001",
+  "name": "示例客户公司",
+  "industry": "物流仓储",
+  "contact": {
+    "name": "[联系人姓名]",
+    "phone": "[联系电话]",
+    "email": "[邮箱]"
+  },
+  "cooperation_level": "A",
+  "preferences": {
+    "common_cabinet_types": ["室内标准柜", "户外防水柜"],
+    "price_sensitivity": "中",
+    "delivery_priority": "高"
+  },
+  "order_history": [
+    {
+      "order_id": "ORD-2025-001",
+      "date": "2025-03-15",
+      "cabinet_type": "室内标准智能柜",
+      "quantity": 50,
+      "amount": 250000
+    }
+  ]
+}
