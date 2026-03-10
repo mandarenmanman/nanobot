@@ -1,7 +1,7 @@
 {
   "type": "sanqing_inspection",
   "aspect": "道德·进化",
-  "timestamp": "2026-03-10T17:47:00+08:00",
+  "timestamp": "2026-03-10T18:19:00+08:00",
   "period": "2026-W11",
   "executive_summary": "本周三清巡检发现2项高风险问题，需优先处理：(1) S005供应商次品率超标；(2) SW-MICRO-01微动开关需紧急切换替代型号",
   "findings_by_category": {
